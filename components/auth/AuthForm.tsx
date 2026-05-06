@@ -72,12 +72,15 @@ export default function AuthForm() {
       animate="visible"
       className="w-full max-w-md relative"
     >
-      {/* Contenedor del Formulario - Rediseñado para pureza visual */}
-      <div className="bg-white dark:bg-zinc-900/50 rounded-[2.5rem] p-8 sm:p-12 shadow-[0_32px_64px_-12px_rgba(0,0,0,0.08)] dark:shadow-[0_32px_64px_-12px_rgba(0,0,0,0.3)] border border-zinc-100 dark:border-zinc-800/50 backdrop-blur-xl relative overflow-hidden transition-all duration-500">
+      {/* Contenedor del Formulario - Rediseñado para pureza visual y futurismo */}
+      <div className="bg-white/80 dark:bg-zinc-900/40 rounded-[2.5rem] p-8 sm:p-12 shadow-[0_32px_64px_-12px_rgba(0,0,0,0.08)] dark:shadow-[0_32px_64px_-12px_rgba(0,0,0,0.3)] border border-zinc-100 dark:border-zinc-800/50 backdrop-blur-2xl relative overflow-hidden transition-all duration-500 group">
         
+        {/* Futuristic Scanline Effect */}
+        <div className="absolute top-0 left-0 w-full h-[2px] bg-linear-to-r from-transparent via-primary/20 to-transparent animate-scan z-0 pointer-events-none"></div>
+
         <div className="relative z-10">
           <motion.div variants={itemVariants} className="text-center mb-10">
-            <h2 className="text-4xl font-black tracking-tighter mb-3 bg-gradient-to-br from-zinc-950 via-zinc-800 to-zinc-700 dark:from-white dark:via-zinc-200 dark:to-zinc-500 bg-clip-text text-transparent">
+            <h2 className="text-4xl font-black tracking-tighter mb-3 bg-linear-to-br from-zinc-950 via-zinc-800 to-zinc-700 dark:from-white dark:via-zinc-200 dark:to-zinc-500 bg-clip-text text-transparent">
               {isLogin ? "Hola de nuevo." : "Únete ahora."}
             </h2>
             <p className="text-zinc-500 dark:text-zinc-400 font-medium">
@@ -89,14 +92,14 @@ export default function AuthForm() {
             {!isLogin && (
               <motion.div variants={itemVariants} className="space-y-2">
                 <label className="text-[10px] font-black uppercase tracking-[0.2em] text-zinc-400 dark:text-zinc-500 ml-1">Username</label>
-                <div className="relative group">
-                  <User className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-400 group-focus-within:text-primary transition-colors" />
+                <div className="relative group/input">
+                  <User className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-400 group-focus-within/input:text-primary transition-colors" />
                   <input
                     type="text"
                     placeholder="Tu nombre de usuario"
                     value={username}
                     onChange={(e) => setUsername(e.target.value)}
-                    className="w-full bg-zinc-50 dark:bg-zinc-950/50 border border-zinc-100 dark:border-zinc-800 rounded-2xl py-4 pl-12 pr-4 text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all text-zinc-900 dark:text-white placeholder:text-zinc-400"
+                    className="w-full bg-zinc-50/50 dark:bg-zinc-950/30 border border-zinc-100 dark:border-zinc-800/50 rounded-2xl py-4 pl-12 pr-4 text-sm focus:outline-none focus:ring-2 focus:ring-primary/10 focus:border-primary transition-all text-zinc-900 dark:text-white placeholder:text-zinc-400"
                   />
                 </div>
               </motion.div>
@@ -104,28 +107,28 @@ export default function AuthForm() {
 
             <motion.div variants={itemVariants} className="space-y-2">
               <label className="text-[10px] font-black uppercase tracking-[0.2em] text-zinc-400 dark:text-zinc-500 ml-1">Email</label>
-              <div className="relative group">
-                <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-400 group-focus-within:text-primary transition-colors" />
+              <div className="relative group/input">
+                <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-400 group-focus-within/input:text-primary transition-colors" />
                 <input
                   type="email"
                   placeholder="ejemplo@correo.com"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="w-full bg-zinc-50 dark:bg-zinc-950/50 border border-zinc-100 dark:border-zinc-800 rounded-2xl py-4 pl-12 pr-4 text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all text-zinc-900 dark:text-white placeholder:text-zinc-400"
+                  className="w-full bg-zinc-50/50 dark:bg-zinc-950/30 border border-zinc-100 dark:border-zinc-800/50 rounded-2xl py-4 pl-12 pr-4 text-sm focus:outline-none focus:ring-2 focus:ring-primary/10 focus:border-primary transition-all text-zinc-900 dark:text-white placeholder:text-zinc-400"
                 />
               </div>
             </motion.div>
 
             <motion.div variants={itemVariants} className="space-y-2">
               <label className="text-[10px] font-black uppercase tracking-[0.2em] text-zinc-400 dark:text-zinc-500 ml-1">Contraseña</label>
-              <div className="relative group">
-                <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-400 group-focus-within:text-primary transition-colors" />
+              <div className="relative group/input">
+                <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-400 group-focus-within/input:text-primary transition-colors" />
                 <input
                   type="password"
                   placeholder="••••••••"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="w-full bg-zinc-50 dark:bg-zinc-950/50 border border-zinc-100 dark:border-zinc-800 rounded-2xl py-4 pl-12 pr-4 text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all text-zinc-900 dark:text-white placeholder:text-zinc-400"
+                  className="w-full bg-zinc-50/50 dark:bg-zinc-950/30 border border-zinc-100 dark:border-zinc-800/50 rounded-2xl py-4 pl-12 pr-4 text-sm focus:outline-none focus:ring-2 focus:ring-primary/10 focus:border-primary transition-all text-zinc-900 dark:text-white placeholder:text-zinc-400"
                 />
               </div>
             </motion.div>
@@ -136,7 +139,7 @@ export default function AuthForm() {
               whileTap={{ scale: 0.99 }}
               type="submit"
               disabled={loading}
-              className="w-full bg-zinc-900 dark:bg-white text-white dark:text-zinc-900 py-4 rounded-2xl font-black text-sm uppercase tracking-widest hover:bg-zinc-800 dark:hover:bg-zinc-100 transition-all shadow-xl shadow-zinc-500/10 disabled:opacity-50 flex items-center justify-center gap-2 group"
+              className="w-full bg-zinc-900 dark:bg-white text-white dark:text-zinc-900 py-4 rounded-2xl font-black text-sm uppercase tracking-widest hover:shadow-[0_0_20px_rgba(var(--primary-rgb),0.3)] transition-all shadow-xl shadow-zinc-500/10 disabled:opacity-50 flex items-center justify-center gap-2 group"
             >
               {loading ? (
                 <Loader2 className="w-5 h-5 animate-spin" />
@@ -162,10 +165,10 @@ export default function AuthForm() {
         </div>
       </div>
 
-      {/* Social Proof / Badges */}
+      {/* Social Proof / Badges - Hidden on mobile to avoid overlap and focus on form */}
       <motion.div 
         variants={itemVariants}
-        className="mt-10 flex flex-wrap justify-center gap-6"
+        className="mt-10 hidden sm:flex flex-wrap justify-center gap-6"
       >
         <div className="flex items-center gap-2.5 group cursor-default">
           <div className="p-2 rounded-xl bg-blue-500/10 text-blue-600 dark:text-blue-400 group-hover:bg-blue-500 group-hover:text-white transition-all duration-300">

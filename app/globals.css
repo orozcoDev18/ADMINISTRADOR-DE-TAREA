@@ -66,3 +66,27 @@
   background-image: radial-gradient(circle, var(--border) 1px, transparent 1px);
   background-size: 32px 32px;
 }
+
+@utility bg-grid-small {
+  background-image: radial-gradient(circle, var(--border) 1px, transparent 1px);
+  background-size: 16px 16px;
+}
+
+@keyframes scan {
+  from { transform: translateY(-100%); opacity: 0; }
+  50% { opacity: 1; }
+  to { transform: translateY(1000%); opacity: 0; }
+}
+
+@keyframes pulse-slow {
+  0%, 100% { opacity: 0.3; transform: scale(1); }
+  50% { opacity: 0.6; transform: scale(1.05); }
+}
+
+.animate-scan {
+  animation: scan 4s linear infinite;
+}
+
+.animate-pulse-slow {
+  animation: pulse-slow 8s ease-in-out infinite;
+}
