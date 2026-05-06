@@ -105,13 +105,19 @@ export default function Home() {
       </div>
 
       {/* Right Side / Mobile View */}
-      <div className="flex-1 lg:w-1/2 flex flex-col items-center justify-start lg:justify-center p-6 sm:p-12 lg:p-24 relative bg-white dark:bg-zinc-950 transition-colors duration-500 overflow-y-auto lg:overflow-hidden pt-12 lg:pt-24">
+      <div className="flex-1 lg:w-1/2 flex flex-col items-center justify-center p-6 sm:p-8 lg:p-24 relative bg-white dark:bg-zinc-950 transition-colors duration-500 overflow-y-auto lg:overflow-hidden pt-6 sm:pt-8 lg:pt-24">
         {/* Futuristic Background Patterns */}
         <div className="absolute inset-0 bg-[radial-gradient(at_top_right,rgba(var(--primary-rgb),0.05),transparent_50%)] pointer-events-none animate-pulse-slow"></div>
         <div className="absolute inset-0 bg-[radial-gradient(at_bottom_left,rgba(var(--primary-rgb),0.03),transparent_50%)] pointer-events-none"></div>
         <div className="absolute inset-0 bg-grid-small opacity-[0.02] dark:opacity-[0.05] pointer-events-none"></div>
 
-        <div className="w-full max-w-md flex flex-col items-center justify-center relative z-20 mb-32 lg:mb-0">
+        {/* DESKTOP: formulario directo sin lógica mobile */}
+        <div className="hidden lg:flex w-full max-w-md flex-col items-center justify-center relative z-20">
+          <AuthForm />
+        </div>
+
+        {/* MOBILE: flujo en dos pasos — landing → formulario */}
+        <div className="lg:hidden w-full max-w-md flex flex-col items-center justify-center relative z-20 mb-16">
           <AnimatePresence mode="wait">
             {!showMobileLogin ? (
               <motion.div 
@@ -119,7 +125,7 @@ export default function Home() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -20 }}
-                className="w-full flex flex-col items-center lg:hidden"
+                className="w-full flex flex-col items-center"
               >
                 <div className="mb-10 flex flex-col items-center gap-2 relative">
                   <motion.div
@@ -168,7 +174,7 @@ export default function Home() {
               >
                 <button 
                   onClick={() => setShowMobileLogin(false)}
-                  className="lg:hidden mb-8 flex items-center gap-2 text-zinc-500 dark:text-zinc-400 font-bold text-xs uppercase tracking-widest hover:text-primary transition-colors"
+                  className="mb-4 flex items-center gap-2 text-zinc-500 dark:text-zinc-400 font-bold text-xs uppercase tracking-widest hover:text-primary transition-colors"
                 >
                   <ArrowLeft className="w-4 h-4" />
                   Volver
@@ -177,11 +183,6 @@ export default function Home() {
               </motion.div>
             )}
           </AnimatePresence>
-
-          {/* Desktop always shows the form */}
-          <div className="hidden lg:block w-full">
-            <AuthForm />
-          </div>
         </div>
 
         <footer className="absolute bottom-8 lg:bottom-12 left-0 w-full text-center z-10 pointer-events-none lg:pointer-events-auto">
