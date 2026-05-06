@@ -45,7 +45,7 @@ export default function Home() {
   if (!mounted) return null;
 
   return (
-    <main className="min-h-screen flex flex-col lg:flex-row bg-background selection:bg-primary/10 transition-colors duration-500 overflow-hidden relative">
+    <main className="h-screen flex flex-col lg:flex-row bg-background selection:bg-primary/10 transition-colors duration-500 overflow-hidden relative">
       {/* Shockwave Transition Overlay */}
       <AnimatePresence mode="wait">
         <motion.div

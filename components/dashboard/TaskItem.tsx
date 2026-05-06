@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { CheckCircle2, Circle, Trash2, User, Pencil, History } from "lucide-react";
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
+import Modal from "../ui/Modal";
 
 function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -38,6 +39,7 @@ export default function TaskItem({
 }) {
   const [isDeleting, setIsDeleting] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [editedTitle, setEditedTitle] = useState(task.title);
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -62,6 +64,12 @@ export default function TaskItem({
     }
   };
 
+  const handleConfirmDelete = () => {
+    setIsDeleting(true);
+    onDelete(task.id);
+    setShowDeleteConfirm(false);
+  };
+
   const isEdited = task.updated_at && 
     new Date(task.updated_at).getTime() - new Date(task.created_at).getTime() > 1000;
 
@@ -73,7 +81,8 @@ export default function TaskItem({
       exit={{ opacity: 0, scale: 0.95 }}
       className={cn(
         "group flex items-center justify-between p-4 glass rounded-xl border border-border/50 hover:border-primary/30 transition-all card-shadow",
-        task.is_completed && !isEditing && "opacity-60 bg-accent/30"
+        "border-l-4 border-l-primary/20",
+        task.is_completed && !isEditing && "opacity-60 bg-accent/30 border-l-green-500/50"
       )}
     >
       <div className="flex items-center gap-4 flex-1 mr-2">
@@ -177,16 +186,25 @@ export default function TaskItem({
         <motion.button
           whileHover={{ scale: 1.1 }}
           whileTap={{ scale: 0.9 }}
-          onClick={() => {
-            setIsDeleting(true);
-            onDelete(task.id);
-          }}
+          onClick={() => setShowDeleteConfirm(true)}
           disabled={isDeleting}
           className="p-2 text-muted-foreground hover:text-red-500 hover:bg-red-500/10 rounded-lg transition-all"
         >
           <Trash2 className="w-4 h-4" />
         </motion.button>
       </div>
+
+      <Modal
+        isOpen={showDeleteConfirm}
+        onClose={() => setShowDeleteConfirm(false)}
+        onConfirm={handleConfirmDelete}
+        isLoading={isDeleting}
+        title="¿Eliminar tarea?"
+        description={`¿Estás seguro de que quieres eliminar "${task.title}"? Esta acción no se puede deshacer.`}
+        confirmText="Eliminar"
+        cancelText="Cancelar"
+        variant="danger"
+      />
     </motion.div>
   );
 }

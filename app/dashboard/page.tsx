@@ -143,10 +143,10 @@ export default function Dashboard() {
   }
 
   return (
-    <div className="min-h-screen flex flex-col bg-background relative overflow-x-hidden">
+    <div className="h-screen flex flex-col bg-background relative overflow-hidden">
       <Navbar />
       
-      <main className="flex-1 max-w-4xl mx-auto w-full px-4 py-8 sm:py-12 relative z-10">
+      <main className="flex-1 overflow-y-auto max-w-4xl mx-auto w-full px-4 py-8 sm:py-12 relative z-10">
         <motion.header 
           initial={{ opacity: 0, x: -20 }}
           animate={{ opacity: 1, x: 0 }}

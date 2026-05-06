@@ -4,7 +4,7 @@
 import { useEffect, useState } from "react";
 import { createClient } from "@/lib/supabase/client";
 import { motion } from "framer-motion";
-import { Camera, Loader2, Save, User, ArrowLeft, BadgeCheck, Mail, Calendar, Settings } from "lucide-react";
+import { Loader2, Save, User, ArrowLeft, BadgeCheck, Mail, Calendar, Settings } from "lucide-react";
 import Navbar from "@/components/layout/Navbar";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
@@ -165,7 +165,6 @@ export default function ProfilePage() {
 
                         {/* Hover Overlay */}
                         <label className="absolute inset-0 bg-black/40 backdrop-blur-[2px] opacity-0 group-hover:opacity-100 transition-all duration-300 flex flex-col items-center justify-center cursor-pointer text-white gap-2">
-                          <Camera className="w-8 h-8" />
                           <span className="text-[10px] font-black uppercase tracking-widest">Cambiar Foto</span>
                           <input type="file" className="hidden" accept="image/*" onChange={handleUpload} disabled={uploading} />
                         </label>
@@ -177,10 +176,6 @@ export default function ProfilePage() {
                         )}
                       </div>
 
-                      {/* Mobile Indicator (Solo visible en pantallas táctiles o cuando no hay hover) */}
-                      <div className="sm:hidden absolute -bottom-1 -right-1 p-2 bg-primary text-primary-foreground rounded-xl border-4 border-background shadow-lg pointer-events-none">
-                        <Camera className="w-4 h-4" />
-                      </div>
                     </div>
                     <div className="text-center sm:text-left space-y-1">
                       <h3 className="text-xl font-bold tracking-tight">Tu Identidad</h3>

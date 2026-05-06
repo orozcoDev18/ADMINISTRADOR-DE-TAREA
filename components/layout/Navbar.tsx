@@ -14,6 +14,7 @@ export default function Navbar() {
   const [user, setUser] = useState<any>(null);
   const [profile, setProfile] = useState<any>(null);
   const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
+  const [isLoggingOut, setIsLoggingOut] = useState(false);
   const supabase = createClient();
   const router = useRouter();
 
@@ -50,9 +51,17 @@ export default function Navbar() {
   }, []);
 
   const handleSignOut = async () => {
-    await supabase.auth.signOut();
-    router.push("/");
-    router.refresh();
+    setIsLoggingOut(true);
+    try {
+      await supabase.auth.signOut();
+      router.push("/");
+      router.refresh();
+    } catch (error) {
+      console.error("Error signing out:", error);
+    } finally {
+      setIsLoggingOut(false);
+      setIsLogoutModalOpen(false);
+    }
   };
 
   return (
@@ -126,6 +135,7 @@ export default function Navbar() {
         isOpen={isLogoutModalOpen}
         onClose={() => setIsLogoutModalOpen(false)}
         onConfirm={handleSignOut}
+        isLoading={isLoggingOut}
         title="¿Cerrar sesión?"
         description="Estás a punto de salir de TaskFlow. ¿Estás seguro de que quieres terminar tu sesión?"
         confirmText="Sí, salir"
