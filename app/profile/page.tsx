@@ -1,8 +1,9 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import { useEffect, useState } from "react";
 import { createClient } from "@/lib/supabase/client";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 import { Camera, Loader2, Save, User, ArrowLeft, BadgeCheck, Mail, Calendar, Settings } from "lucide-react";
 import Navbar from "@/components/layout/Navbar";
 import { useRouter } from "next/navigation";
@@ -10,7 +11,9 @@ import Link from "next/link";
 import { toast } from "sonner";
 
 export default function ProfilePage() {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [user, setUser] = useState<any>(null);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [profile, setProfile] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [updating, setUpdating] = useState(false);
@@ -81,7 +84,7 @@ export default function ProfilePage() {
   const updateProfile = async (e: React.FormEvent) => {
     e.preventDefault();
     setUpdating(true);
-    
+
     const { data: { user } } = await supabase.auth.getUser();
     if (!user) return;
 
@@ -114,14 +117,14 @@ export default function ProfilePage() {
   return (
     <div className="min-h-screen flex flex-col bg-background">
       <Navbar />
-      
+
       <main className="flex-1 w-full max-w-5xl mx-auto px-4 py-6 sm:py-12 relative z-10">
         <Link href="/dashboard" className="inline-flex items-center gap-2 text-muted-foreground hover:text-foreground mb-8 group transition-colors font-semibold text-sm">
           <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
           VOLVER AL DASHBOARD
         </Link>
 
-        <motion.header 
+        <motion.header
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
           className="mb-10"
@@ -135,7 +138,7 @@ export default function ProfilePage() {
         <div className="flex flex-col lg:flex-row gap-8 items-start">
           {/* Left Column: Editor */}
           <div className="flex-1 w-full">
-            <motion.div 
+            <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               className="glass rounded-[2.5rem] border border-border/50 card-shadow overflow-hidden"
@@ -147,7 +150,7 @@ export default function ProfilePage() {
 
               <div className="p-8 sm:p-12 -mt-16 sm:-mt-24 relative z-10">
                 <form onSubmit={updateProfile} className="space-y-10">
-                  
+
                   {/* Avatar Upload Section */}
                   <div className="flex flex-col sm:flex-row items-center gap-8">
                     <div className="relative group">
@@ -159,7 +162,7 @@ export default function ProfilePage() {
                             <User className="w-20 h-20" />
                           </div>
                         )}
-                        
+
                         {/* Hover Overlay */}
                         <label className="absolute inset-0 bg-black/40 backdrop-blur-[2px] opacity-0 group-hover:opacity-100 transition-all duration-300 flex flex-col items-center justify-center cursor-pointer text-white gap-2">
                           <Camera className="w-8 h-8" />
@@ -173,7 +176,7 @@ export default function ProfilePage() {
                           </div>
                         )}
                       </div>
-                      
+
                       {/* Mobile Indicator (Solo visible en pantallas táctiles o cuando no hay hover) */}
                       <div className="sm:hidden absolute -bottom-1 -right-1 p-2 bg-primary text-primary-foreground rounded-xl border-4 border-background shadow-lg pointer-events-none">
                         <Camera className="w-4 h-4" />
@@ -235,7 +238,7 @@ export default function ProfilePage() {
               <h3 className="text-sm font-black uppercase tracking-widest mb-6 flex items-center gap-2">
                 <Settings className="w-4 h-4" /> Vista Previa
               </h3>
-              
+
               {/* Mini Profile Card */}
               <div className="flex flex-col items-center text-center p-4 bg-background/40 rounded-[1.5rem] subtle-border">
                 <div className="w-20 h-20 rounded-full overflow-hidden mb-4 border-2 border-primary/20 p-1">
