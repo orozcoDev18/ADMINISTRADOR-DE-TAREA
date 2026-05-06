@@ -168,7 +168,7 @@ export default function TaskItem({
             whileHover={{ scale: 1.1 }}
             whileTap={{ scale: 0.9 }}
             onClick={() => setIsEditing(true)}
-            className="p-2 opacity-0 group-hover:opacity-100 text-muted-foreground hover:text-primary hover:bg-primary/10 rounded-lg transition-all"
+            className="p-2 text-muted-foreground hover:text-primary hover:bg-primary/10 rounded-lg transition-all"
           >
             <Pencil className="w-4 h-4" />
           </motion.button>
@@ -182,7 +182,7 @@ export default function TaskItem({
             onDelete(task.id);
           }}
           disabled={isDeleting}
-          className="p-2 opacity-0 group-hover:opacity-100 text-muted-foreground hover:text-red-500 hover:bg-red-500/10 rounded-lg transition-all"
+          className="p-2 text-muted-foreground hover:text-red-500 hover:bg-red-500/10 rounded-lg transition-all"
         >
           <Trash2 className="w-4 h-4" />
         </motion.button>
