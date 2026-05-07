@@ -69,14 +69,14 @@ export default function Dashboard() {
     const { data, error } = await supabase
       .from("todos")
       .insert([{ title: newTaskTitle, user_id: user.id }])
-      .select("*, profiles(username, avatar_url)")
+      .select()
       .single();
 
     if (error) {
       setTasks(tasks.filter((t) => t.id !== tempId));
       toast.error("Error al añadir tarea");
     } else {
-      setTasks((prev) => prev.map((t) => (t.id === tempId ? data : t)));
+      setTasks((prev) => prev.map((t) => (t.id === tempId ? { ...data, profiles: profile } : t)));
       toast.success("Tarea añadida");
     }
     setIsAdding(false);
