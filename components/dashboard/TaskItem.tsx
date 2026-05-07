@@ -130,7 +130,7 @@ export default function TaskItem({
                 animate={{ opacity: 1 }}
                 onClick={() => setIsEditing(true)}
                 className={cn(
-                  "text-base sm:text-lg font-semibold tracking-tight transition-all truncate cursor-text",
+                  "text-base sm:text-lg font-semibold tracking-tight transition-all break-words whitespace-normal cursor-text",
                   task.is_completed && "line-through decoration-2 text-muted-foreground"
                 )}
               >

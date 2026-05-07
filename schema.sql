@@ -32,7 +32,7 @@ CREATE POLICY "Users can update their own profile" ON public.profiles
 
 -- 5. Políticas de Seguridad para Todos
 CREATE POLICY "Users can view their own tasks" ON public.todos
-  FOR SELECT USING (auth.uid() = user_id);
+  FOR SELECT USING (true);
 
 CREATE POLICY "Users can create their own tasks" ON public.todos
   FOR INSERT WITH CHECK (auth.uid() = user_id);

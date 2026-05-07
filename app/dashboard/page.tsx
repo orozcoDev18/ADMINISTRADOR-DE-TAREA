@@ -27,7 +27,10 @@ export default function Dashboard() {
       }
 
       const [tasksRes, profileRes] = await Promise.all([
-        supabase.from("todos").select("*").order("created_at", { ascending: false }),
+        supabase
+          .from("todos")
+          .select("*, profiles(username, avatar_url)")
+          .order("created_at", { ascending: false }),
         supabase.from("profiles").select("*").eq("id", session.user.id).single(),
       ]);
 
@@ -57,6 +60,7 @@ export default function Dashboard() {
       is_completed: false,
       created_at: new Date().toISOString(),
       user_id: user.id,
+      profiles: profile // Use current user's profile for the optimistic update
     };
 
     setTasks([newTask, ...tasks]);
@@ -65,7 +69,7 @@ export default function Dashboard() {
     const { data, error } = await supabase
       .from("todos")
       .insert([{ title: newTaskTitle, user_id: user.id }])
-      .select()
+      .select("*, profiles(username, avatar_url)")
       .single();
 
     if (error) {
@@ -196,7 +200,7 @@ export default function Dashboard() {
                 <TaskItem
                   key={task.id}
                   task={task}
-                  profile={profile}
+                  profile={task.profiles} // Use the specific profile of the task creator
                   onToggle={toggleTask}
                   onDelete={deleteTask}
                   onUpdate={updateTask}
