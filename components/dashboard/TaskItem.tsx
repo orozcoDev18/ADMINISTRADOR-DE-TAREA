@@ -2,10 +2,14 @@
 
 import { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { CheckCircle2, Circle, Trash2, User, Pencil, History } from "lucide-react";
+import { CheckCircle2, Circle, Trash2, User, Pencil, History, Camera } from "lucide-react";
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
 import Modal from "../ui/Modal";
+import EvidenceModal from "./EvidenceModal";
+import ImageViewer from "../ui/ImageViewer";
+import { createClient } from "@/lib/supabase/client";
+import { toast } from "sonner";
 
 function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -15,6 +19,7 @@ interface Task {
   id: string;
   title: string;
   is_completed: boolean;
+  evidence_url?: string | null;
   created_at: string;
   updated_at?: string;
 }
@@ -33,15 +38,18 @@ export default function TaskItem({
 }: {
   task: Task;
   profile?: Profile;
-  onToggle: (id: string, is_completed: boolean) => void;
+  onToggle: (id: string, is_completed: boolean, evidence_url?: string) => void;
   onDelete: (id: string) => void;
   onUpdate: (id: string, newTitle: string) => void;
 }) {
   const [isDeleting, setIsDeleting] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+  const [showEvidenceModal, setShowEvidenceModal] = useState(false);
+  const [showImageViewer, setShowImageViewer] = useState(false);
   const [editedTitle, setEditedTitle] = useState(task.title);
   const inputRef = useRef<HTMLInputElement>(null);
+  const supabase = createClient();
 
   useEffect(() => {
     if (isEditing && inputRef.current) {
@@ -64,6 +72,36 @@ export default function TaskItem({
     }
   };
 
+  const handleConfirmEvidence = async (file?: File) => {
+    if (file) {
+      try {
+        const { data: { user } } = await supabase.auth.getUser();
+        if (!user) return;
+
+        const fileExt = file.name.split(".").pop();
+        const fileName = `evidence-${task.id}-${Date.now()}.${fileExt}`;
+
+        const { error: uploadError } = await supabase.storage
+          .from("task-evidence")
+          .upload(fileName, file);
+
+        if (uploadError) throw uploadError;
+
+        const { data: { publicUrl } } = supabase.storage
+          .from("task-evidence")
+          .getPublicUrl(fileName);
+
+        setShowEvidenceModal(false);
+        onToggle(task.id, true, publicUrl);
+      } catch {
+        toast.error("Error al subir la evidencia");
+      }
+    } else {
+      setShowEvidenceModal(false);
+      onToggle(task.id, true);
+    }
+  };
+
   const handleConfirmDelete = () => {
     setIsDeleting(true);
     onDelete(task.id);
@@ -80,15 +118,22 @@ export default function TaskItem({
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, scale: 0.95 }}
       className={cn(
-        "group flex items-center justify-between p-4 glass rounded-xl border border-border/50 hover:border-primary/30 transition-all card-shadow",
+        "group flex flex-col p-4 glass rounded-xl border border-border/50 hover:border-primary/30 transition-all card-shadow",
         "border-l-4 border-l-primary/20",
         task.is_completed && !isEditing && "opacity-60 bg-accent/30 border-l-green-500/50"
       )}
     >
+      <div className="flex items-center justify-between w-full">
       <div className="flex items-center gap-4 flex-1 mr-2">
         <motion.button
           whileTap={{ scale: 0.8 }}
-          onClick={() => onToggle(task.id, !task.is_completed)}
+          onClick={() => {
+            if (task.is_completed) {
+              onToggle(task.id, false);
+            } else {
+              setShowEvidenceModal(true);
+            }
+          }}
           disabled={isEditing}
           className={cn(
             "p-1 rounded-full transition-colors shrink-0",
@@ -167,8 +212,8 @@ export default function TaskItem({
                 </>
               )}
             </div>
-          </div>
         </div>
+      </div>
       </div>
 
       <div className="flex items-center gap-1">
@@ -193,6 +238,29 @@ export default function TaskItem({
           <Trash2 className="w-4 h-4" />
         </motion.button>
       </div>
+      </div>
+
+      {task.is_completed && task.evidence_url && (
+        <motion.div
+          initial={{ opacity: 0, height: 0 }}
+          animate={{ opacity: 1, height: "auto" }}
+          className="mt-3 w-full"
+        >
+          <div className="relative rounded-xl overflow-hidden bg-accent/30 cursor-pointer group/image">
+            <div className="absolute inset-0 bg-black/0 group-hover/image:bg-black/10 transition-colors z-10" />
+            <img
+              src={task.evidence_url}
+              alt="Evidencia"
+              className="w-full max-h-48 sm:max-h-56 object-cover"
+              onClick={() => setShowImageViewer(true)}
+            />
+            <div className="absolute bottom-2 right-2 px-2 py-1 bg-black/50 backdrop-blur-sm rounded-lg text-white text-[10px] font-bold flex items-center gap-1 z-20">
+              <Camera className="w-3 h-3" />
+              EVIDENCIA
+            </div>
+          </div>
+        </motion.div>
+      )}
 
       <Modal
         isOpen={showDeleteConfirm}
@@ -204,6 +272,18 @@ export default function TaskItem({
         confirmText="Eliminar"
         cancelText="Cancelar"
         variant="danger"
+      />
+
+      <EvidenceModal
+        isOpen={showEvidenceModal}
+        onClose={() => setShowEvidenceModal(false)}
+        onConfirm={handleConfirmEvidence}
+      />
+
+      <ImageViewer
+        isOpen={showImageViewer}
+        src={task.evidence_url || ""}
+        onClose={() => setShowImageViewer(false)}
       />
     </motion.div>
   );

@@ -16,6 +16,7 @@ CREATE TABLE IF NOT EXISTS public.todos (
   user_id UUID REFERENCES auth.users ON DELETE CASCADE NOT NULL,
   title TEXT NOT NULL,
   is_completed BOOLEAN DEFAULT FALSE,
+  evidence_url TEXT,
   created_at TIMESTAMP WITH TIME ZONE DEFAULT TIMEZONE('utc'::text, NOW()) NOT NULL
 );
 
@@ -62,7 +63,7 @@ CREATE TRIGGER on_auth_user_created
   AFTER INSERT ON auth.users
   FOR EACH ROW EXECUTE PROCEDURE public.handle_new_user();
 
--- 7. Storage: Crear bucket para avatares
+-- 7. Storage: Bucket para avatares
 -- Nota: Esto usualmente se hace desde el dashboard de Supabase, 
 -- pero aquí están las políticas para el bucket 'avatars' (debe existir)
 -- INSERT INTO storage.buckets (id, name, public) VALUES ('avatars', 'avatars', true);
@@ -74,4 +75,17 @@ CREATE POLICY "Anyone can upload an avatar." ON storage.objects
   FOR INSERT WITH CHECK (bucket_id = 'avatars');
 
 CREATE POLICY "Users can update their own avatar." ON storage.objects
+  FOR UPDATE USING (auth.uid() = owner);
+
+-- 8. Storage: Bucket para evidencia de tareas
+-- Nota: Crear el bucket desde el dashboard de Supabase
+-- INSERT INTO storage.buckets (id, name, public) VALUES ('task-evidence', 'task-evidence', true);
+
+CREATE POLICY "Evidence images are publicly accessible." ON storage.objects
+  FOR SELECT USING (bucket_id = 'task-evidence');
+
+CREATE POLICY "Users can upload evidence." ON storage.objects
+  FOR INSERT WITH CHECK (bucket_id = 'task-evidence');
+
+CREATE POLICY "Users can update their own evidence." ON storage.objects
   FOR UPDATE USING (auth.uid() = owner);

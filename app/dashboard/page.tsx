@@ -82,14 +82,19 @@ export default function Dashboard() {
     setIsAdding(false);
   };
 
-  const toggleTask = async (id: string, is_completed: boolean) => {
+  const toggleTask = async (id: string, is_completed: boolean, evidence_url?: string) => {
     setTasks((prev) =>
-      prev.map((t) => (t.id === id ? { ...t, is_completed } : t))
+      prev.map((t) => (t.id === id ? { ...t, is_completed, evidence_url: evidence_url ?? t.evidence_url } : t))
     );
+
+    const updateData: Record<string, unknown> = { is_completed, updated_at: new Date().toISOString() };
+    if (evidence_url !== undefined) {
+      updateData.evidence_url = evidence_url;
+    }
 
     const { error } = await supabase
       .from("todos")
-      .update({ is_completed, updated_at: new Date().toISOString() })
+      .update(updateData)
       .eq("id", id);
 
     if (error) {
