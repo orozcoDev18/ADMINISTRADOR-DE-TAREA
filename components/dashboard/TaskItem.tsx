@@ -246,13 +246,15 @@ export default function TaskItem({
           animate={{ opacity: 1, height: "auto" }}
           className="mt-3 w-full"
         >
-          <div className="relative rounded-xl overflow-hidden bg-accent/30 cursor-pointer group/image">
-            <div className="absolute inset-0 bg-black/0 group-hover/image:bg-black/10 transition-colors z-10" />
+          <div
+            className="relative rounded-xl overflow-hidden bg-accent/30 cursor-pointer group/image"
+            onClick={() => setShowImageViewer(true)}
+          >
+            <div className="absolute inset-0 bg-black/0 group-hover/image:bg-black/10 transition-colors z-10 pointer-events-none" />
             <img
               src={task.evidence_url}
               alt="Evidencia"
               className="w-full max-h-48 sm:max-h-56 object-cover"
-              onClick={() => setShowImageViewer(true)}
             />
             <div className="absolute bottom-2 right-2 px-2 py-1 bg-black/50 backdrop-blur-sm rounded-lg text-white text-[10px] font-bold flex items-center gap-1 z-20">
               <Camera className="w-3 h-3" />
